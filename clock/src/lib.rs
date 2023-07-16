@@ -1,24 +1,17 @@
 use std::fmt;
 
 
-fn hour_offset_min( m : i32 ) -> ( i32 , i32 ) {
-    let mut m = m;
-    let mut h = 0;
+fn total_hours( hours : i32 , minutes : i32 ) -> i32 {
+    let min_offset = ( minutes - minutes.rem_euclid( 60 )) / 60;
+    let hours      = ( hours + min_offset ) % 24;
 
-    if m < 0 {
-        while m < 0 {
-            h -= 1;
-            m += 60;
-        }
-    }
-    else {
-        while m - 60 >= 0 {
-            h += 1;
-            m -= 60;
-        }
-    }
+    if   hours >= 0 { hours }
+    else            { 24 + hours }
+}
 
-    ( h , m )
+
+fn total_minutes( minutes : i32 ) -> i32 {
+    minutes.rem_euclid( 60 )
 }
 
 
@@ -31,11 +24,9 @@ pub struct Clock {
 
 impl Clock {
     pub fn new( hours : i32 , minutes : i32 ) -> Self {
-        let ( h , m ) = hour_offset_min( minutes );
-
         Clock {
-            hours   : ( hours + h ).rem_euclid( 24 )
-          , minutes : m 
+            hours   : total_hours( hours, minutes )
+          , minutes : total_minutes( minutes )
             }
     }
 
