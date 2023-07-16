@@ -1,20 +1,7 @@
 use std::fmt;
 
 
-fn fmt_temporal( i : i32 ) -> String {
-    let mut result = String::new();
-
-    if i < 10 {
-        result += "0";
-    }
-
-    result += &i.to_string();
-
-    result
-}
-
-
-fn min_to_hr_min( m : i32 ) -> ( i32 , i32 ) {
+fn hour_offset_min( m : i32 ) -> ( i32 , i32 ) {
     let mut mm = m;
     let mut h  = 0;
 
@@ -38,36 +25,36 @@ fn min_to_hr_min( m : i32 ) -> ( i32 , i32 ) {
 fn calc_hour( h : i32 ) -> i32 {
     let hh = h % 24;
 
-    if   h < 0 { 24 + hh }
+    if   h < 0 { ( 24 + hh ) % 24 }
     else       { hh }
 }
 
 
-#[derive( Eq , PartialEq , Debug )]
+#[derive( PartialEq , Debug )]
 pub struct Clock {
-    pub hour   : i32
-  , pub minute : i32 
+    hours   : i32
+  , minutes : i32 
     }
 
 
 impl Clock {
     pub fn new( hours : i32 , minutes : i32 ) -> Self {
-        let ( h , m ) = min_to_hr_min( minutes );
+        let ( h , m ) = hour_offset_min( minutes );
 
         Clock {
-            hour   : calc_hour( hours + h )
-          , minute : m 
+            hours   : calc_hour( hours + h )
+          , minutes : m 
             }
     }
 
     pub fn add_minutes( &self , minutes: i32 ) -> Self {
-        unimplemented!( "Add {minutes} minutes to existing Clock time" );
+       Clock::new( self.hours , self.minutes + minutes ) 
     }
 }
 
 
 impl fmt::Display for Clock {
     fn fmt( &self , f : &mut fmt::Formatter<'_> ) -> fmt::Result {
-        write!( f , "{}:{}" , fmt_temporal( self.hour ) , fmt_temporal( self.minute ))
+        write!( f , "{:>02}:{:>02}" , self.hours , self.minutes )
     }
 }
