@@ -2,31 +2,23 @@ use std::fmt;
 
 
 fn hour_offset_min( m : i32 ) -> ( i32 , i32 ) {
-    let mut mm = m;
-    let mut h  = 0;
+    let mut m = m;
+    let mut h = 0;
 
     if m < 0 {
-        while mm < 0 {
-             h -= 1;
-            mm += 60;
+        while m < 0 {
+            h -= 1;
+            m += 60;
         }
     }
     else {
-        while mm - 60 >= 0 {
-             h += 1;
-            mm -= 60;
+        while m - 60 >= 0 {
+            h += 1;
+            m -= 60;
         }
     }
 
-    ( h , mm )
-}
-
-
-fn calc_hour( h : i32 ) -> i32 {
-    let hh = h % 24;
-
-    if   h < 0 { ( 24 + hh ) % 24 }
-    else       { hh }
+    ( h , m )
 }
 
 
@@ -42,7 +34,7 @@ impl Clock {
         let ( h , m ) = hour_offset_min( minutes );
 
         Clock {
-            hours   : calc_hour( hours + h )
+            hours   : ( hours + h ).rem_euclid( 24 )
           , minutes : m 
             }
     }
