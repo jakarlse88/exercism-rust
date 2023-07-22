@@ -1,4 +1,4 @@
-fn to_u32_vec( code : &str ) -> Option<Vec<u32>> {
+fn to_opt_u32_vec( code : &str ) -> Option<Vec<u32>> {
     code
        .chars()
        .map( | c | c.to_digit( 10 ))
@@ -39,7 +39,7 @@ pub fn is_valid( code: &str ) -> bool {
         return false
     }
 
-    match &to_u32_vec( &sanitised ) {
+    match &to_opt_u32_vec( &sanitised ) {
         Some( vec ) => validate_checksum( &sum_luhn( &vec ) )
       , None        => false  
     }
