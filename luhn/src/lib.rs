@@ -16,15 +16,14 @@ fn double_luhn( i : &u32 ) -> u32 {
 
 
 fn sum_luhn( vec : &Vec<u32> ) -> u32 {
-    let mut sum : u32 = 0;
-
-    for ( i , val ) in vec.iter().rev().enumerate() {
-        sum =
-            if   !( i % 2 == 0 ) { sum + double_luhn( val ) }
-            else                 { sum + val };
-    }
-    
-    sum
+    vec
+        .iter()
+        .rev()
+        .enumerate() 
+        .fold( 0 , | acc , ( i , val ) | 
+            if   !( i % 2 == 0 ) { acc + double_luhn( val ) }
+            else                 { acc + val }
+        )
 }
 
 
