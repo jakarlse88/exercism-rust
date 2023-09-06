@@ -21,7 +21,7 @@ pub fn annotate( minefield : &[ &str ] ) -> Vec<String> {
                 }
 
                 row_result.push( 
-                    if   counter == 0 { SPACE_CH } 
+                    if   counter == 0 { SPACE_CH             } 
                     else              { counter as u8 + b'0' } as char 
                  );
             }    
@@ -35,3 +35,4 @@ pub fn annotate( minefield : &[ &str ] ) -> Vec<String> {
     
     result
 }
+
